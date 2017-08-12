@@ -1,5 +1,7 @@
 package org.yagamipaul.tools.logfilecleaner
 
+import org.yagamipaul.tools.logfilecleaner.dto.ProcessResults
+
 /**
  * Main class for the app.
  * 2017-08-10
@@ -8,6 +10,15 @@ package org.yagamipaul.tools.logfilecleaner
  * @since 0.0.1
  */
 class LogCleanerApp {
+
+    fun prepare(){
+
+    }
+
+
+    fun start() : ProcessResults{
+
+    }
 
 
 }
