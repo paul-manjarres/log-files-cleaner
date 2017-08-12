@@ -10,7 +10,6 @@
 .gradle/
 /out/
 /build/
-*.iml
 
 
 # BlueJ files
