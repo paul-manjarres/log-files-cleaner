@@ -16,9 +16,7 @@ class LogCleanerApp {
     }
 
 
-    fun start() : ProcessResults{
 
-    }
 
 
 }
