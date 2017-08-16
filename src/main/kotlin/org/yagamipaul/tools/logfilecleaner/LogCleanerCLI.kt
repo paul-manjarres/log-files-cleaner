@@ -14,7 +14,7 @@ fun main(args: Array<String>) {
     println("Log File Cleaner")
 
 
-    val options : Options = Options()
+    val options = Options()
 
     val fileOption : Option = Option.builder("f")
             .hasArg()
@@ -35,15 +35,25 @@ fun main(args: Array<String>) {
     options.addOption(stringsOption)
 
     val parser : CommandLineParser = DefaultParser()
-    val commandLine : CommandLine = parser.parse(options, args)
 
 
-    val filePath = commandLine.getOptionValue("f")
-    val stringsPath = commandLine.getOptionValue("sf")
+    try {
+        val commandLine: CommandLine = parser.parse(options, args)
 
-    println("File path : $filePath")
-    println("Strings path : $stringsPath")
 
+        val filePath = commandLine.getOptionValue("f")
+        val stringsPath = commandLine.getOptionValue("sf")
+
+        println("File path : $filePath")
+        println("Strings path : $stringsPath")
+
+
+    }catch (ex: MissingOptionException){
+        println("Error: required options not present:  " )
+        for( s in ex.missingOptions){
+            println(" - $s")
+        }
+    }
 
 }
 
