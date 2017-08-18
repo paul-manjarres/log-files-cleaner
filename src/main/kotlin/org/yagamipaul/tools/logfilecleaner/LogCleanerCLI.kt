@@ -1,6 +1,8 @@
 package org.yagamipaul.tools.logfilecleaner
 
 import org.apache.commons.cli.*
+import java.io.File
+import kotlin.system.exitProcess
 
 /**
  * Main method.
@@ -13,47 +15,8 @@ fun main(args: Array<String>) {
 
     println("Log File Cleaner")
 
-
-    val options = Options()
-
-    val fileOption : Option = Option.builder("f")
-            .hasArg()
-            .longOpt("file")
-            .desc("The file to process")
-            .required()
-            .build()
-
-    val stringsOption : Option = Option.builder("sf")
-            .hasArg()
-            .longOpt("strings")
-            .desc("a path to a file containing the strings to match")
-            .required()
-            .build()
-
-
-    options.addOption(fileOption)
-    options.addOption(stringsOption)
-
-    val parser : CommandLineParser = DefaultParser()
-
-
-    try {
-        val commandLine: CommandLine = parser.parse(options, args)
-
-
-        val filePath = commandLine.getOptionValue("f")
-        val stringsPath = commandLine.getOptionValue("sf")
-
-        println("File path : $filePath")
-        println("Strings path : $stringsPath")
-
-
-    }catch (ex: MissingOptionException){
-        println("Error: required options not present:  " )
-        for( s in ex.missingOptions){
-            println(" - $s")
-        }
-    }
+    var app = LogCleanerApp()
+    app.startApp(args)
 
 }
 
