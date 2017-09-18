@@ -1,8 +1,12 @@
 package org.yagamipaul.tools.logfilecleaner
 
 import com.google.common.base.Stopwatch
+import org.apache.commons.io.FileUtils
+import org.apache.commons.io.LineIterator
+import org.apache.commons.lang3.StringUtils
 import org.yagamipaul.tools.logfilecleaner.dto.ProcessResults
 import java.io.File
+import java.io.PrintWriter
 import java.util.concurrent.TimeUnit
 
 
@@ -43,6 +47,39 @@ class LogCleanerProcessor (
 
         println("File: ${inputFile.name} Size: ${inputFile.length() / 1024}")
 
+        val outputFilePw  = PrintWriter(outputFile);
+
+
+        val it : LineIterator =  FileUtils.lineIterator(inputFile, "UTF-8");
+
+        var lineCount = 0L
+        var writtenLineCount = 0L
+
+        try {
+            while (it.hasNext()) {
+                val line = it.nextLine()
+                var remove = false;
+
+                for ( s in  patterns) {
+                    if (StringUtils.contains(line, s)) {
+                        remove = true
+                        break
+                    }
+                }
+                if (!remove) {
+                    outputFilePw.println(line)
+                    writtenLineCount++
+                }
+                lineCount++
+            }
+        }
+        finally {
+            LineIterator.closeQuietly(it)
+            outputFilePw.close()
+        }
+
+
+
         timer.stop()
 
         println("Total ellapsed time: ${timer.elapsed(TimeUnit.MILLISECONDS)} ms")
@@ -52,11 +89,11 @@ class LogCleanerProcessor (
                 inputFileName = inputFile.absolutePath,
                 outputFileName = outputFileName,
                 outputFileAbsolutePath = outputFile.absolutePath,
-                inputFileSizeKB = 0,
-                outputFileSizeKB = 0,
-                initialLineCount = 0,
-                finalLineCount = 0,
-                millis = 0
+                inputFileSizeKB = inputFile.length() / 1024L,
+                outputFileSizeKB = outputFile.length() / 1024L,
+                initialLineCount = lineCount,
+                finalLineCount = writtenLineCount,
+                millis = timer.elapsed(TimeUnit.MILLISECONDS)
         )
     }
 
