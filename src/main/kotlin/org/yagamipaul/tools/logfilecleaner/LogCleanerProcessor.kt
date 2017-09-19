@@ -25,7 +25,9 @@ class LogCleanerProcessor (
     /**
      * Suffix for the cleaned files
      */
-    private val SUFFIX: String = "CLEANED"
+    private val SUFFIX: String = "_CLEANED"
+
+
 
 
     /**
@@ -39,7 +41,7 @@ class LogCleanerProcessor (
         val name = fileName.substring(0, index)
         val ext = fileName.substring(index + 1)
 
-        val outputFileName = "$fileName.$ext"
+        val outputFileName = "$name$SUFFIX.$ext"
         val outputFile = File(this.outputPath.absolutePath + File.separator + outputFileName)
 
 
@@ -47,10 +49,9 @@ class LogCleanerProcessor (
 
         println("File: ${inputFile.name} Size: ${inputFile.length() / 1024}")
 
-        val outputFilePw  = PrintWriter(outputFile);
 
-
-        val it : LineIterator =  FileUtils.lineIterator(inputFile, "UTF-8");
+        val writer : ILogOutputWriter = LogFileOutputWriter(outputFile)
+        val it : LineIterator =  FileUtils.lineIterator(inputFile, "UTF-8")
 
         var lineCount = 0L
         var writtenLineCount = 0L
@@ -58,7 +59,7 @@ class LogCleanerProcessor (
         try {
             while (it.hasNext()) {
                 val line = it.nextLine()
-                var remove = false;
+                var remove = false
 
                 for ( s in  patterns) {
                     if (StringUtils.contains(line, s)) {
@@ -66,8 +67,9 @@ class LogCleanerProcessor (
                         break
                     }
                 }
+
                 if (!remove) {
-                    outputFilePw.println(line)
+                    writer.write(line)
                     writtenLineCount++
                 }
                 lineCount++
@@ -75,7 +77,7 @@ class LogCleanerProcessor (
         }
         finally {
             LineIterator.closeQuietly(it)
-            outputFilePw.close()
+            writer.end()
         }
 
 
