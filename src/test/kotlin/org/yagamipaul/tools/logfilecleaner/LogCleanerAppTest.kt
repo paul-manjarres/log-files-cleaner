@@ -2,6 +2,7 @@ package org.yagamipaul.tools.logfilecleaner
 
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
+import java.io.File
 
 class LogCleanerAppTest {
 
@@ -14,5 +15,14 @@ class LogCleanerAppTest {
         Assertions.assertEquals(results.patternsPath, "patterns")
     }
 
+
+    @Test
+    fun testThatPatternsLoadAsASetOfStrings(){
+        val patternsFile = File(javaClass.classLoader.getResource("testpatterns.txt").file)
+        val patterns = LogCleanerApp().readPatterns(patternsFile)
+        Assertions.assertEquals(2, patterns.size)
+        Assertions.assertTrue(patterns.contains("aaaaaa"))
+        Assertions.assertTrue(patterns.contains("bbbbbb"))
+    }
 
 }

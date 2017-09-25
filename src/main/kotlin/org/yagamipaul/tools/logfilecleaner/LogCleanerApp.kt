@@ -1,8 +1,10 @@
 package org.yagamipaul.tools.logfilecleaner
 
 import org.apache.commons.cli.*
+import org.apache.commons.io.FileUtils
 import org.yagamipaul.tools.logfilecleaner.dto.AppParameters
 import java.io.File
+import java.util.ArrayList
 import kotlin.system.exitProcess
 
 /**
@@ -15,6 +17,9 @@ import kotlin.system.exitProcess
 class LogCleanerApp {
 
 
+    /**
+     * Starts the application, process the arguments.
+     */
     fun startApp(args: Array<String>) {
 
         val parameters = processArguments(args)
@@ -37,7 +42,20 @@ class LogCleanerApp {
         //TODO: there should be default options for pattern file
 
 
+        val processor = LogCleanerProcessor(
+                file,
+                File(file.absolutePath),
+                emptySet())
+
+
     }
+
+
+    /**
+     *  Read a file and get a set of patterns
+     */
+    fun readPatterns(file: File): Set<String> = file.readLines().toHashSet()
+
 
 
     /**

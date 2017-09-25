@@ -10,7 +10,7 @@ class LogCleanerProcessorTest {
     @Test
     fun test1() {
 
-        val input = File("classpath:testinputfile.txt")
+        val input = File(javaClass.classLoader.getResource("testinputfile.txt").file)
         val outputPath = File("/tmp/")
 
         val app = LogCleanerProcessor(inputFile = input,
@@ -19,8 +19,8 @@ class LogCleanerProcessorTest {
         )
 
         app.start()
-
-
     }
+
+
 
 }
