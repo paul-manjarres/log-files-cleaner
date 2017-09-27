@@ -2,18 +2,20 @@ group 'org.yagamipaul.tools'
 version '0.0.1'
 
 buildscript {
-    ext.kotlin_version = '1.1.4'
+    ext.kotlin_version = '1.1.50'
 
     repositories {
         mavenCentral()
     }
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.0'
     }
 }
 
 apply plugin: 'kotlin'
 apply plugin: 'application'
+apply plugin: 'org.junit.platform.gradle.plugin'
 
 mainClassName = "org.yagamipaul.tools.logfilecleaner.LogCleanerCLIKt"
 
@@ -27,9 +29,11 @@ dependencies {
     compile 'com.google.guava:guava:23.0'
     compile 'org.apache.commons:commons-lang3:3.6'
     compile 'org.apache.commons:commons-io:1.3.2'
+    compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.+'
+    compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.+'
+
     testCompile("org.junit.jupiter:junit-jupiter-api:5.0.0")
-//    compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.+'
-//    compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.+'
+    testRuntime("org.junit.jupiter:junit-jupiter-engine:5.0.0")
 }
 
 compileKotlin {

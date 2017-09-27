@@ -2,6 +2,8 @@ package org.yagamipaul.tools.logfilecleaner
 
 import org.apache.commons.cli.*
 import org.apache.commons.io.FileUtils
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.yagamipaul.tools.logfilecleaner.dto.AppParameters
 import java.io.File
 import java.util.ArrayList
@@ -17,6 +19,11 @@ import kotlin.system.exitProcess
 class LogCleanerApp {
 
 
+    companion object {
+        val LOG = LoggerFactory.getLogger(LogCleanerApp::class.java.name)
+    }
+
+
     /**
      * Starts the application, process the arguments.
      */
@@ -28,11 +35,11 @@ class LogCleanerApp {
         var file = File(parameters.filePath)
 
         if (!file.exists()) {
-            println("The file $parameters.filePath doesn't exists")
+            println("--> ERROR : The file ${parameters.filePath} doesn't exists")
             exitProcess(1)
         }
 
-        println("Selected file: ${parameters.filePath}")
+        LOG.info("Selected file: ${parameters.filePath}")
 
 
         // Load the patterns file
@@ -43,9 +50,14 @@ class LogCleanerApp {
 
 
         val processor = LogCleanerProcessor(
-                file,
-                File(file.absolutePath),
-                emptySet())
+                inputFile = file,
+                outputPath = File(file.parentFile.path),
+                patterns = emptySet())
+
+        val results = processor.start()
+
+
+        println("$results")
 
 
     }
@@ -74,7 +86,7 @@ class LogCleanerApp {
 
         val stringsOption: Option = Option.builder("p")
                 .hasArg()
-                .longOpt("strings")
+                .longOpt("patterns")
                 .desc("a path to a file containing the strings to match")
                 .required()
                 .build()
@@ -90,8 +102,8 @@ class LogCleanerApp {
             val filePath = commandLine.getOptionValue("f")
             val stringsPath = commandLine.getOptionValue("p")
 
-            println("File path : $filePath")
-            println("Patterns path : $stringsPath")
+            LOG.info("File path : $filePath")
+            LOG.info("Patterns path : $stringsPath")
 
             return AppParameters(filePath, stringsPath)
 

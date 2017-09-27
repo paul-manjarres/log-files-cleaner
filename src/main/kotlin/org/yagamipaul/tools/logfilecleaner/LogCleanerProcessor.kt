@@ -4,9 +4,9 @@ import com.google.common.base.Stopwatch
 import org.apache.commons.io.FileUtils
 import org.apache.commons.io.LineIterator
 import org.apache.commons.lang3.StringUtils
+import org.slf4j.LoggerFactory
 import org.yagamipaul.tools.logfilecleaner.dto.ProcessResults
 import java.io.File
-import java.io.PrintWriter
 import java.util.concurrent.TimeUnit
 
 
@@ -22,12 +22,16 @@ class LogCleanerProcessor (
         val outputPath: File,
         val patterns: Set<String>) {
 
+
+
+    companion object {
+        val LOG = LoggerFactory.getLogger(LogCleanerProcessor::class.java.name)
+    }
+
     /**
      * Suffix for the cleaned files
      */
     private val SUFFIX: String = "_CLEANED"
-
-
 
 
     /**
@@ -47,7 +51,7 @@ class LogCleanerProcessor (
 
         val timer: Stopwatch = Stopwatch.createStarted()
 
-        println("File: ${inputFile.name} Size: ${inputFile.length() / 1024}")
+        LOG.info("File: ${inputFile.name} Size: ${inputFile.length() / 1024}")
 
 
         val writer : ILogOutputWriter = LogFileOutputWriter(outputFile)
@@ -84,7 +88,7 @@ class LogCleanerProcessor (
 
         timer.stop()
 
-        println("Total ellapsed time: ${timer.elapsed(TimeUnit.MILLISECONDS)} ms")
+        LOG.info("Total ellapsed time: ${timer.elapsed(TimeUnit.MILLISECONDS)} ms")
 
 
         return ProcessResults(
