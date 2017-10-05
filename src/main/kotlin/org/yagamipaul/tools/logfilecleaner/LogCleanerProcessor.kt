@@ -6,6 +6,7 @@ import org.apache.commons.io.LineIterator
 import org.apache.commons.lang3.StringUtils
 import org.slf4j.LoggerFactory
 import org.yagamipaul.tools.logfilecleaner.dto.ProcessResults
+import org.yagamipaul.tools.logfilecleaner.utils.addSuffix
 import java.io.File
 import java.util.concurrent.TimeUnit
 
@@ -23,7 +24,6 @@ class LogCleanerProcessor (
         val patterns: Set<String>) {
 
 
-
     companion object {
         val LOG = LoggerFactory.getLogger(LogCleanerProcessor::class.java.name)
     }
@@ -31,7 +31,7 @@ class LogCleanerProcessor (
     /**
      * Suffix for the cleaned files
      */
-    private val SUFFIX: String = "_CLEANED"
+    private val suffix = "_CLEANED"
 
 
     /**
@@ -41,11 +41,7 @@ class LogCleanerProcessor (
 
 
         val fileName = inputFile.name
-        val index = fileName.lastIndexOf(".")
-        val name = fileName.substring(0, index)
-        val ext = fileName.substring(index + 1)
-
-        val outputFileName = "$name$SUFFIX.$ext"
+        val outputFileName = addSuffix(fileName, suffix)
         val outputFile = File(this.outputPath.absolutePath + File.separator + outputFileName)
 
 

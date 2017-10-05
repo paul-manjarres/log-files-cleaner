@@ -6,13 +6,13 @@ import java.io.PrintWriter
 /**
  *
  */
-class LogFileOutputWriter(newfile: File) : ILogOutputWriter {
+class LogFileOutputWriter(newFile: File) : ILogOutputWriter {
 
 
     /**
      *  The file writer
      */
-    private val outputFilePw: PrintWriter = PrintWriter(newfile)
+    private val outputFilePw: PrintWriter = PrintWriter(newFile)
 
 
     /**

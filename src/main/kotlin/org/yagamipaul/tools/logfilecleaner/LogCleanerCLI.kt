@@ -12,7 +12,6 @@ import kotlin.system.exitProcess
  * 
  */
 fun main(args: Array<String>) {
-
     println("Log File Cleaner")
     var app = LogCleanerApp()
     app.startApp(args)
